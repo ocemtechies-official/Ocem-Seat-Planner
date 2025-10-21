@@ -260,10 +260,10 @@ export default function CreateHallPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>What's Next?</CardTitle>
+              <CardTitle>What&apos;s Next?</CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-muted-foreground">
-              After creating the hall, you'll be able to:
+              After creating the hall, you&apos;ll be able to:
               <ul className="mt-2 space-y-1">
                 <li>• View the visual layout</li>
                 <li>• Mark specific seats as unusable</li>
