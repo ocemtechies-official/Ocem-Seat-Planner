@@ -98,7 +98,7 @@ export function useAuth() {
       throw new Error("Invalid roll number. Please contact your administrator.");
     }
 
-    if (student.user_id) {
+    if ((student as any).user_id) {
       throw new Error("This roll number is already linked to an account.");
     }
 
@@ -115,7 +115,7 @@ export function useAuth() {
       const { error: updateError } = await supabase
         .from("students")
         .update({ user_id: authData.user.id })
-        .eq("id", student.id);
+        .eq("id", (student as any).id);
 
       if (updateError) {
         console.error("Error linking student to user:", updateError);
