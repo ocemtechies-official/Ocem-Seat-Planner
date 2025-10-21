@@ -11,7 +11,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify user is authenticated
@@ -21,7 +21,7 @@ export async function GET(
     const studentId = searchParams.get("student_id");
     const format = searchParams.get("format") || "pdf"; // 'pdf' or 'zip'
 
-    const examId = params.id;
+    const { id: examId } = await params;
 
     // Fetch exam details
     const exam = await getExamById(examId);
