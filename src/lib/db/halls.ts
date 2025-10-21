@@ -37,7 +37,7 @@ export async function createHall(hall: {
 
   const { data, error } = await supabase
     .from("exam_halls")
-    .insert(hall)
+    .insert(hall as any)
     .select()
     .single();
 
@@ -57,7 +57,7 @@ export async function updateHall(
 ) {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("exam_halls")
     .update(updates)
     .eq("id", id)
