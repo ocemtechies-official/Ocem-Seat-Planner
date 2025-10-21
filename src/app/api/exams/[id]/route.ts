@@ -9,13 +9,14 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify user is authenticated
     await requireRole(["admin", "staff", "supervisor", "student"]);
 
-    const exam = await getExamById(params.id);
+    const { id } = await params;
+    const exam = await getExamById(id);
 
     return NextResponse.json({
       success: true,
@@ -32,7 +33,7 @@ export async function GET(
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify user is admin or staff
@@ -79,7 +80,8 @@ export async function PATCH(
       updateData.duration_minutes = parseInt(body.duration_minutes);
     if (body.status !== undefined) updateData.status = body.status;
 
-    const exam = await updateExam(params.id, updateData);
+    const { id } = await params;
+    const exam = await updateExam(id, updateData);
 
     return NextResponse.json({
       success: true,
@@ -96,13 +98,14 @@ export async function PATCH(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify user is admin or staff
     await requireRole(["admin", "staff"]);
 
-    await deleteExam(params.id);
+    const { id } = await params;
+    await deleteExam(id);
 
     return NextResponse.json({
       success: true,
