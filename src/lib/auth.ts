@@ -25,7 +25,7 @@ export const getCurrentUser = cache(async () => {
 
   return {
     ...user,
-    role: userData?.role as UserRole | undefined,
+    role: (userData as any)?.role as UserRole | undefined,
   };
 });
 
