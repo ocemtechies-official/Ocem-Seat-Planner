@@ -32,10 +32,10 @@ export async function POST(request: NextRequest) {
     const courses = await getCourses();
 
     const departmentMap = new Map(
-      departments.map((d) => [d.code.toLowerCase(), d.id])
+      (departments as any[]).map((d) => [d.code.toLowerCase(), d.id])
     );
     const courseMap = new Map(
-      courses.map((c) => [c.code.toLowerCase(), c.id])
+      (courses as any[]).map((c) => [c.code.toLowerCase(), c.id])
     );
 
     const result: StudentImportResult = {
