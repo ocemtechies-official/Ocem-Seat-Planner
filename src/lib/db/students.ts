@@ -101,7 +101,7 @@ export async function createStudent(student: {
 
   const { data, error } = await supabase
     .from("students")
-    .insert(student)
+    .insert(student as any)
     .select(`
       *,
       department:departments(id, name, code),
@@ -126,7 +126,7 @@ export async function updateStudent(
 ) {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("students")
     .update(updates)
     .eq("id", id)
@@ -164,7 +164,7 @@ export async function bulkCreateStudents(
 
   const { data, error } = await supabase
     .from("students")
-    .insert(students)
+    .insert(students as any)
     .select();
 
   if (error) throw error;
