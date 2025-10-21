@@ -53,7 +53,6 @@ export async function DELETE(
   try {
     await requireRole(["admin", "staff"]);
 
-    // TODO: Check if hall has future exam assignments before deleting
     await deleteHall(params.id);
 
     return NextResponse.json({
