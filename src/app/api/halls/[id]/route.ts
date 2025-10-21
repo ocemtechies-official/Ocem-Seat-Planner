@@ -5,10 +5,11 @@ import { NextRequest, NextResponse } from "next/server";
 // GET /api/halls/[id] - Get hall by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const hall = await getHallById(params.id);
+    const { id } = await params;
+    const hall = await getHallById(id);
     return NextResponse.json({ success: true, data: hall });
   } catch (error: any) {
     return NextResponse.json(
@@ -21,13 +22,14 @@ export async function GET(
 // PATCH /api/halls/[id] - Update hall
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireRole(["admin", "staff"]);
 
     const body = await request.json();
-    const hall = await updateHall(params.id, body);
+    const { id } = await params;
+    const hall = await updateHall(id, body);
 
     return NextResponse.json({ success: true, data: hall });
   } catch (error: any) {
@@ -48,12 +50,13 @@ export async function PATCH(
 // DELETE /api/halls/[id] - Delete hall
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireRole(["admin", "staff"]);
 
-    await deleteHall(params.id);
+    const { id } = await params;
+    await deleteHall(id);
 
     return NextResponse.json({
       success: true,
