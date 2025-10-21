@@ -66,8 +66,8 @@ export function useAuth() {
       } = await supabase.auth.getUser();
 
       if (authUser && userData) {
-        setUser({ ...authUser, role: userData.role } as AuthUser);
-        setRole(userData.role as UserRole);
+        setUser({ ...authUser, role: (userData as any).role } as AuthUser);
+        setRole((userData as any).role as UserRole);
       }
     } catch (error) {
       console.error("Error fetching user role:", error);
