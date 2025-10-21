@@ -4,13 +4,14 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify user is authenticated
     await requireRole(["admin", "staff", "supervisor"]);
 
-    const assignments = await getExamAssignments(params.id);
+    const { id } = await params;
+    const assignments = await getExamAssignments(id);
 
     return NextResponse.json({
       success: true,
