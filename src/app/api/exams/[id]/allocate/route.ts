@@ -10,7 +10,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify user is admin or staff
@@ -22,7 +22,7 @@ export async function POST(
     }
 
     const body = await request.json();
-    const examId = params.id;
+    const { id: examId } = await params;
 
     // Validate pattern
     const validPatterns = ["department", "course", "year", "random"];
@@ -107,13 +107,13 @@ export async function POST(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify user is admin or staff
     await requireRole(["admin", "staff"]);
 
-    const examId = params.id;
+    const { id: examId } = await params;
 
     // Clear all assignments
     const result = await clearAssignments(examId);
