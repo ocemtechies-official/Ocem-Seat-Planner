@@ -29,6 +29,8 @@ export function useAuth() {
         }
       } catch (error) {
         console.error("Error fetching session:", error);
+        setUser(null);
+        setRole(null);
       } finally {
         setLoading(false);
       }
@@ -40,11 +42,20 @@ export function useAuth() {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      if (session?.user) {
-        await fetchUserRole(session.user.id);
-      } else {
+      setLoading(true);
+      try {
+        if (session?.user) {
+          await fetchUserRole(session.user.id);
+        } else {
+          setUser(null);
+          setRole(null);
+        }
+      } catch (error) {
+        console.error("Error in auth state change:", error);
         setUser(null);
         setRole(null);
+      } finally {
+        setLoading(false);
       }
     });
 
@@ -55,11 +66,20 @@ export function useAuth() {
 
   const fetchUserRole = async (userId: string) => {
     try {
-      const { data: userData } = await supabase
+      const { data: userData, error: userError } = await supabase
         .from("users")
         .select("role, email")
         .eq("id", userId)
         .single();
+
+      if (userError) {
+        console.error("Error fetching user role:", userError);
+        // User exists in auth but not in users table
+        // This can happen for new registrations
+        setUser(null);
+        setRole(null);
+        return;
+      }
 
       const {
         data: { user: authUser },
@@ -68,9 +88,14 @@ export function useAuth() {
       if (authUser && userData) {
         setUser({ ...authUser, role: (userData as any).role } as AuthUser);
         setRole((userData as any).role as UserRole);
+      } else {
+        setUser(null);
+        setRole(null);
       }
     } catch (error) {
       console.error("Error fetching user role:", error);
+      setUser(null);
+      setRole(null);
     }
   };
 
