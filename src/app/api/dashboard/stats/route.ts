@@ -115,7 +115,7 @@ export async function GET(request: Request) {
       const { count: myExamsCount } = await supabase
         .from("exam_students")
         .select("*", { count: "exact", head: true })
-        .eq("student_id", studentData.id);
+        .eq("student_id", (studentData as any).id);
 
       // Get upcoming exams for this student
       const today = new Date().toISOString().split("T")[0];
@@ -137,7 +137,7 @@ export async function GET(request: Request) {
           )
         `
         )
-        .eq("student_id", studentData.id);
+        .eq("student_id", (studentData as any).id);
 
       const upcomingExams = (examStudents || [])
         .map((es: any) => es.exam)

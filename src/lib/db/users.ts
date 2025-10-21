@@ -62,7 +62,7 @@ export async function updateUserRole(
 ) {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("users")
     .update({
       role,
@@ -138,7 +138,7 @@ export async function setStaffPermissions(
 
     const { error } = await supabase
       .from("staff_permissions")
-      .insert(permissions);
+      .insert(permissions as any);
 
     if (error) {
       console.error("Error setting staff permissions:", error);

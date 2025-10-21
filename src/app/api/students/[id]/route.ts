@@ -9,10 +9,11 @@ import { NextRequest, NextResponse } from "next/server";
 // GET /api/students/[id] - Get student by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const student = await getStudentById(params.id);
+    const { id } = await params;
+    const student = await getStudentById(id);
     return NextResponse.json({ success: true, data: student });
   } catch (error: any) {
     return NextResponse.json(
@@ -25,13 +26,14 @@ export async function GET(
 // PATCH /api/students/[id] - Update student
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireRole(["admin", "staff"]);
 
     const body = await request.json();
-    const student = await updateStudent(params.id, body);
+    const { id } = await params;
+    const student = await updateStudent(id, body);
 
     return NextResponse.json({ success: true, data: student });
   } catch (error: any) {
@@ -59,12 +61,13 @@ export async function PATCH(
 // DELETE /api/students/[id] - Delete student
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireRole(["admin", "staff"]);
 
-    await deleteStudent(params.id);
+    const { id } = await params;
+    await deleteStudent(id);
 
     return NextResponse.json({
       success: true,

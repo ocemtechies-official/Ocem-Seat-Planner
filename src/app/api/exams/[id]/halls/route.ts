@@ -9,13 +9,14 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify user is authenticated
     await requireRole(["admin", "staff", "supervisor"]);
 
-    const halls = await getExamHalls(params.id);
+    const { id } = await params;
+    const halls = await getExamHalls(id);
 
     return NextResponse.json({
       success: true,
@@ -32,7 +33,7 @@ export async function GET(
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify user is admin or staff
@@ -60,7 +61,8 @@ export async function POST(
       );
     }
 
-    const assignments = await assignHallsToExam(params.id, body.hall_ids);
+    const { id } = await params;
+    const assignments = await assignHallsToExam(id, body.hall_ids);
 
     return NextResponse.json({
       success: true,
@@ -93,7 +95,7 @@ export async function POST(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify user is admin or staff
@@ -102,16 +104,18 @@ export async function DELETE(
     const { searchParams } = new URL(request.url);
     const hallId = searchParams.get("hall_id");
 
+    const { id } = await params;
+
     if (hallId) {
       // Remove specific hall
-      await removeHallFromExam(params.id, hallId);
+      await removeHallFromExam(id, hallId);
       return NextResponse.json({
         success: true,
         message: "Hall removed from exam",
       });
     } else {
       // Remove all halls
-      await removeAllHallsFromExam(params.id);
+      await removeAllHallsFromExam(id);
       return NextResponse.json({
         success: true,
         message: "All halls removed from exam",

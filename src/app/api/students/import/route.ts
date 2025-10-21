@@ -32,10 +32,10 @@ export async function POST(request: NextRequest) {
     const courses = await getCourses();
 
     const departmentMap = new Map(
-      departments.map((d) => [d.code.toLowerCase(), d.id])
+      (departments as any[]).map((d) => [d.code.toLowerCase(), d.id])
     );
     const courseMap = new Map(
-      courses.map((c) => [c.code.toLowerCase(), c.id])
+      (courses as any[]).map((c) => [c.code.toLowerCase(), c.id])
     );
 
     const result: StudentImportResult = {
@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
         if (existingStudent) {
           if (updateExisting) {
             // Update existing student
-            await updateStudent(existingStudent.id, {
+            await updateStudent((existingStudent as any).id, {
               name: row.name,
               email: row.email,
               department_id: departmentId,

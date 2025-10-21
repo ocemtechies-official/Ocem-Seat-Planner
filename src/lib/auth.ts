@@ -25,7 +25,7 @@ export const getCurrentUser = cache(async () => {
 
   return {
     ...user,
-    role: userData?.role as UserRole | undefined,
+    role: (userData as any)?.role as UserRole | undefined,
   };
 });
 
@@ -114,7 +114,7 @@ export async function getAccessibleDepartments(): Promise<string[]> {
   if (user.role === "admin") {
     const supabase = await createServerClient();
     const { data } = await supabase.from("departments").select("id");
-    return data?.map((d) => d.id) || [];
+    return (data as any)?.map((d: any) => d.id) || [];
   }
 
   // Staff can only access assigned departments
@@ -125,7 +125,7 @@ export async function getAccessibleDepartments(): Promise<string[]> {
       .select("department_id")
       .eq("user_id", user.id);
 
-    return data?.map((p) => p.department_id) || [];
+    return (data as any)?.map((p: any) => p.department_id) || [];
   }
 
   return [];

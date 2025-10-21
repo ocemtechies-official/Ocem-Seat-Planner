@@ -26,7 +26,7 @@ export async function createSeats(seats: Array<{
 
   const { data, error } = await supabase
     .from("seats")
-    .insert(seats)
+    .insert(seats as any)
     .select();
 
   if (error) throw error;
@@ -44,7 +44,7 @@ export async function updateSeat(
 ) {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("seats")
     .update(updates)
     .eq("id", id)
@@ -62,7 +62,7 @@ export async function bulkUpdateSeats(
 
   // Update each seat individually (Supabase doesn't support bulk updates directly)
   const promises = updates.map((update) =>
-    supabase
+    (supabase as any)
       .from("seats")
       .update({ is_usable: update.is_usable })
       .eq("id", update.id)

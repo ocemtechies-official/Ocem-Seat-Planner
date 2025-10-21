@@ -49,7 +49,7 @@ export async function createCourse(course: {
 
   const { data, error } = await supabase
     .from("courses")
-    .insert(course)
+    .insert(course as any)
     .select(`
       *,
       department:departments(id, name, code)
@@ -72,7 +72,7 @@ export async function updateCourse(
 ) {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("courses")
     .update(updates)
     .eq("id", id)

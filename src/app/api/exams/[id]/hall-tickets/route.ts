@@ -11,7 +11,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify user is authenticated
@@ -21,7 +21,7 @@ export async function GET(
     const studentId = searchParams.get("student_id");
     const format = searchParams.get("format") || "pdf"; // 'pdf' or 'zip'
 
-    const examId = params.id;
+    const { id: examId } = await params;
 
     // Fetch exam details
     const exam = await getExamById(examId);
@@ -52,10 +52,10 @@ export async function GET(
           course: assignment.student.course,
         },
         exam: {
-          subject: exam.subject,
-          exam_date: exam.exam_date,
-          start_time: exam.start_time,
-          duration_minutes: exam.duration_minutes,
+          subject: (exam as any).subject,
+          exam_date: (exam as any).exam_date,
+          start_time: (exam as any).start_time,
+          duration_minutes: (exam as any).duration_minutes,
         },
         assignment: {
           hall: assignment.hall,
@@ -95,10 +95,10 @@ export async function GET(
           course: assignment.student.course,
         },
         exam: {
-          subject: exam.subject,
-          exam_date: exam.exam_date,
-          start_time: exam.start_time,
-          duration_minutes: exam.duration_minutes,
+          subject: (exam as any).subject,
+          exam_date: (exam as any).exam_date,
+          start_time: (exam as any).start_time,
+          duration_minutes: (exam as any).duration_minutes,
         },
         assignment: {
           hall: assignment.hall,
@@ -117,10 +117,10 @@ export async function GET(
 
       const zipBlob = await zip.generateAsync({ type: "nodebuffer" });
 
-      return new NextResponse(zipBlob, {
+      return new NextResponse(zipBlob as any, {
         headers: {
           "Content-Type": "application/zip",
-          "Content-Disposition": `attachment; filename="hall-tickets-${exam.course.code}-${exam.exam_date}.zip"`,
+          "Content-Disposition": `attachment; filename="hall-tickets-${(exam as any).course.code}-${(exam as any).exam_date}.zip"`,
         },
       });
     } else {

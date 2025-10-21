@@ -9,10 +9,11 @@ import { NextRequest, NextResponse } from "next/server";
 // GET /api/departments/[id] - Get department by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const department = await getDepartmentById(params.id);
+    const { id } = await params;
+    const department = await getDepartmentById(id);
     return NextResponse.json({ success: true, data: department });
   } catch (error: any) {
     return NextResponse.json(
@@ -25,13 +26,14 @@ export async function GET(
 // PATCH /api/departments/[id] - Update department
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireRole(["admin"]);
 
     const body = await request.json();
-    const department = await updateDepartment(params.id, body);
+    const { id } = await params;
+    const department = await updateDepartment(id, body);
 
     return NextResponse.json({ success: true, data: department });
   } catch (error: any) {
@@ -52,12 +54,13 @@ export async function PATCH(
 // DELETE /api/departments/[id] - Delete department
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireRole(["admin"]);
 
-    await deleteDepartment(params.id);
+    const { id } = await params;
+    await deleteDepartment(id);
 
     return NextResponse.json({
       success: true,

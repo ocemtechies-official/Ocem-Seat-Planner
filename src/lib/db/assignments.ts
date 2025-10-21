@@ -234,7 +234,7 @@ export async function updateAssignment(
 ): Promise<SeatAssignment> {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("seat_assignments")
     .update({
       seat_id: newSeatId,

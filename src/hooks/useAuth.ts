@@ -66,8 +66,8 @@ export function useAuth() {
       } = await supabase.auth.getUser();
 
       if (authUser && userData) {
-        setUser({ ...authUser, role: userData.role } as AuthUser);
-        setRole(userData.role as UserRole);
+        setUser({ ...authUser, role: (userData as any).role } as AuthUser);
+        setRole((userData as any).role as UserRole);
       }
     } catch (error) {
       console.error("Error fetching user role:", error);
@@ -98,7 +98,7 @@ export function useAuth() {
       throw new Error("Invalid roll number. Please contact your administrator.");
     }
 
-    if (student.user_id) {
+    if ((student as any).user_id) {
       throw new Error("This roll number is already linked to an account.");
     }
 
@@ -112,10 +112,10 @@ export function useAuth() {
 
     if (authData.user) {
       // Link student record to user
-      const { error: updateError } = await supabase
+      const { error: updateError } = await (supabase as any)
         .from("students")
         .update({ user_id: authData.user.id })
-        .eq("id", student.id);
+        .eq("id", (student as any).id);
 
       if (updateError) {
         console.error("Error linking student to user:", updateError);
