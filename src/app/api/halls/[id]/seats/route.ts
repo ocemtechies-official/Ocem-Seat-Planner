@@ -5,10 +5,11 @@ import { NextRequest, NextResponse } from "next/server";
 // GET /api/halls/[id]/seats - Get all seats for a hall
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const seats = await getSeatsByHallId(params.id);
+    const { id } = await params;
+    const seats = await getSeatsByHallId(id);
     return NextResponse.json({ success: true, data: seats });
   } catch (error: any) {
     return NextResponse.json(
@@ -21,7 +22,7 @@ export async function GET(
 // PATCH /api/halls/[id]/seats - Bulk update seats (toggle usable/unusable)
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireRole(["admin", "staff"]);
