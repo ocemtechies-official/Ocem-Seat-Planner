@@ -117,7 +117,7 @@ export async function GET(
 
       const zipBlob = await zip.generateAsync({ type: "nodebuffer" });
 
-      return new NextResponse(zipBlob, {
+      return new NextResponse(zipBlob as any, {
         headers: {
           "Content-Type": "application/zip",
           "Content-Disposition": `attachment; filename="hall-tickets-${(exam as any).course.code}-${(exam as any).exam_date}.zip"`,
