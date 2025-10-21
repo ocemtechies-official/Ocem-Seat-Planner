@@ -71,6 +71,38 @@ export async function updateHall(
 export async function deleteHall(id: string) {
   const supabase = await createClient();
 
+  // Check if hall has future exam assignments
+  const { data: futureExams, error: checkError } = await supabase
+    .from("exam_halls_assignments")
+    .select(`
+      id,
+      exams (
+        id,
+        subject,
+        exam_date,
+        status
+      )
+    `)
+    .eq("hall_id", id);
+
+  if (checkError) throw checkError;
+
+  // Check if any assigned exams are in the future or scheduled
+  const today = new Date().toISOString().split("T")[0];
+  const hasFutureExams = futureExams?.some((assignment: any) => {
+    const exam = assignment.exams;
+    return (
+      exam &&
+      (exam.exam_date >= today || exam.status === "scheduled")
+    );
+  });
+
+  if (hasFutureExams) {
+    throw new Error(
+      "Cannot delete hall with scheduled or future exams. Please reassign or delete those exams first."
+    );
+  }
+
   const { error } = await supabase.from("exam_halls").delete().eq("id", id);
 
   if (error) throw error;
