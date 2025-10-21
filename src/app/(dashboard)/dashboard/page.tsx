@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
 import { Users, ClipboardList, Building2, Calendar } from "lucide-react";
+import Link from "next/link";
 
 export default function DashboardPage() {
   const { role } = useAuth();
@@ -79,7 +80,7 @@ export default function DashboardPage() {
             <CardTitle>Quick Actions</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            <a
+            <Link
               href="/students/import"
               className="flex items-center gap-3 rounded-lg border p-4 hover:bg-gray-50 transition-colors"
             >
@@ -90,9 +91,9 @@ export default function DashboardPage() {
                   Upload CSV or Excel file
                 </p>
               </div>
-            </a>
+            </Link>
 
-            <a
+            <Link
               href="/halls/create"
               className="flex items-center gap-3 rounded-lg border p-4 hover:bg-gray-50 transition-colors"
             >
@@ -103,9 +104,9 @@ export default function DashboardPage() {
                   Configure seating layout
                 </p>
               </div>
-            </a>
+            </Link>
 
-            <a
+            <Link
               href="/exams/create"
               className="flex items-center gap-3 rounded-lg border p-4 hover:bg-gray-50 transition-colors"
             >
@@ -116,7 +117,7 @@ export default function DashboardPage() {
                   Schedule a new exam
                 </p>
               </div>
-            </a>
+            </Link>
           </CardContent>
         </Card>
 
@@ -133,7 +134,7 @@ export default function DashboardPage() {
               <div>
                 <p className="font-medium">Setup Departments and Courses</p>
                 <p className="text-sm text-muted-foreground">
-                  Configure your institution's academic structure
+                  Configure your institution&apos;s academic structure
                 </p>
               </div>
             </div>
