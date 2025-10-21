@@ -84,7 +84,7 @@ export async function POST(request: Request) {
       id: authData.user.id,
       email: body.email,
       role: body.role,
-    });
+    } as any);
 
     if (userError) {
       console.error("Error creating user record:", userError);

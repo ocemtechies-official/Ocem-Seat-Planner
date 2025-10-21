@@ -130,7 +130,7 @@ export async function createExam(examData: CreateExamData) {
       duration_minutes: examData.duration_minutes,
       status: examData.status || "draft",
       created_by: examData.created_by,
-    })
+    } as any)
     .select()
     .single();
 
@@ -145,7 +145,7 @@ export async function createExam(examData: CreateExamData) {
 export async function updateExam(examId: string, examData: UpdateExamData) {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("exams")
     .update({
       ...examData,
@@ -230,7 +230,7 @@ export async function assignStudentsToExam(
 
   const { data, error } = await supabase
     .from("exam_students")
-    .insert(examStudents)
+    .insert(examStudents as any)
     .select();
 
   if (error) {
@@ -315,7 +315,7 @@ export async function assignHallsToExam(examId: string, hallIds: string[]) {
 
   const { data, error } = await supabase
     .from("exam_halls_assignments")
-    .insert(examHalls)
+    .insert(examHalls as any)
     .select();
 
   if (error) {

@@ -70,6 +70,7 @@ export default function EditStudentPage() {
     year: "1",
   });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchStudent();
     fetchDepartments();

@@ -115,7 +115,7 @@ export async function allocateSeats(
 
     if (hallsError) throw hallsError;
 
-    const halls: Hall[] =
+    const halls: Hall[] = (
       hallAssignments
         ?.map((ha: any) => {
           if (!ha.hall) return null;
@@ -125,7 +125,8 @@ export async function allocateSeats(
             seats: ha.hall.seats.filter((s: Seat) => s.is_usable),
           };
         })
-        .filter(Boolean) || [];
+        .filter((hall): hall is Hall => hall !== null) || []
+    );
 
     if (halls.length === 0) {
       return {
@@ -411,7 +412,7 @@ export async function saveAssignments(
           hall_id: a.hall_id,
           assigned_by: a.assigned_by,
           is_manual: a.is_manual,
-        }))
+        })) as any
       );
 
     if (error) throw error;
