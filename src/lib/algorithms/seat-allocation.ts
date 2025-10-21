@@ -412,7 +412,7 @@ export async function saveAssignments(
           hall_id: a.hall_id,
           assigned_by: a.assigned_by,
           is_manual: a.is_manual,
-        }))
+        })) as any
       );
 
     if (error) throw error;
