@@ -114,7 +114,7 @@ export function useAuth() {
       // Link student record to user
       const { error: updateError } = await supabase
         .from("students")
-        .update({ user_id: authData.user.id })
+        .update({ user_id: authData.user.id } as any)
         .eq("id", (student as any).id);
 
       if (updateError) {
