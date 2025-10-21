@@ -134,9 +134,12 @@ export function LoginForm() {
             Continue with Google
           </Button>
 
-          <div className="text-center text-sm">
-            Don't have an account?{" "}
-            <Link href="/register" className="text-primary hover:underline">
+          <div className="text-center text-sm text-muted-foreground">
+            Don&apos;t have an account?{" "}
+            <Link
+              href="/register"
+              className="text-primary hover:underline"
+            >
               Register as Student
             </Link>
           </div>
