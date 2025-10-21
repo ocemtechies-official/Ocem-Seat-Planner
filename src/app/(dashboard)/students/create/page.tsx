@@ -90,6 +90,7 @@ export default function CreateStudentPage() {
     (course) => course.department_id === formData.department_id
   );
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     // Auto-select first course when department changes
     if (filteredCourses.length > 0) {
