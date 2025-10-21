@@ -72,9 +72,9 @@ export async function updateCourse(
 ) {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("courses")
-    .update(updates as any)
+    .update(updates)
     .eq("id", id)
     .select(`
       *,
