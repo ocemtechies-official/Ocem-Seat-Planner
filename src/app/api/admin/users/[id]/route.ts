@@ -5,12 +5,13 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireRole(["admin"]);
+    const { id } = await params;
 
-    const user = await getUserById(params.id);
+    const user = await getUserById(id);
 
     return NextResponse.json({
       success: true,
@@ -27,13 +28,13 @@ export async function GET(
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireRole(["admin"]);
 
     const body = await request.json();
-    const userId = params.id;
+    const { id: userId } = await params;
 
     // Update role if provided
     if (body.role) {
@@ -62,12 +63,12 @@ export async function PATCH(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireRole(["admin"]);
 
-    const userId = params.id;
+    const { id: userId } = await params;
     const supabase = await createClient();
 
     // Delete from users table (will cascade)
