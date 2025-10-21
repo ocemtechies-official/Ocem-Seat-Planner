@@ -158,7 +158,7 @@ export default function DepartmentsPage() {
         <div>
           <h1 className="text-3xl font-bold">Departments</h1>
           <p className="text-muted-foreground mt-2">
-            Manage your institution's departments
+            Manage your institution&apos;s departments
           </p>
         </div>
         <Button onClick={() => handleOpenDialog()}>
