@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
         if (existingStudent) {
           if (updateExisting) {
             // Update existing student
-            await updateStudent(existingStudent.id, {
+            await updateStudent((existingStudent as any).id, {
               name: row.name,
               email: row.email,
               department_id: departmentId,
