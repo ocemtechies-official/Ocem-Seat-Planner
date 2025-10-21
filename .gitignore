@@ -9,6 +9,7 @@
 # testing
 /coverage
 
+package-lock.json
 # next.js
 /.next/
 /out/
@@ -46,3 +47,6 @@ next-env.d.ts
 *.swp
 *.swo
 *~
+
+.env.local
+
