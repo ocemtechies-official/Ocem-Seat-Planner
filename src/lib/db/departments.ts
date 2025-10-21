@@ -34,7 +34,7 @@ export async function createDepartment(department: {
 
   const { data, error } = await supabase
     .from("departments")
-    .insert(department)
+    .insert(department as any)
     .select()
     .single();
 
@@ -48,7 +48,7 @@ export async function updateDepartment(
 ) {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("departments")
     .update(updates)
     .eq("id", id)
