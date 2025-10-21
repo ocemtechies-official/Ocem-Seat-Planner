@@ -44,10 +44,34 @@ export default function HallLayoutPage() {
   >([]);
 
   useEffect(() => {
+    const fetchHallData = async () => {
+      try {
+        const [hallResponse, seatsResponse] = await Promise.all([
+          fetch(`/api/halls/${hallId}`),
+          fetch(`/api/halls/${hallId}/seats`),
+        ]);
+
+        const hallResult = await hallResponse.json();
+        const seatsResult = await seatsResponse.json();
+
+        if (hallResult.success) {
+          setHall(hallResult.data);
+        }
+
+        if (seatsResult.success) {
+          setSeats(seatsResult.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch hall data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchHallData();
   }, [hallId]);
 
-  const fetchHallData = async () => {
+  const refetchHallData = async () => {
     try {
       const [hallResponse, seatsResponse] = await Promise.all([
         fetch(`/api/halls/${hallId}`),
@@ -66,8 +90,6 @@ export default function HallLayoutPage() {
       }
     } catch (error) {
       console.error("Failed to fetch hall data:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -127,16 +149,16 @@ export default function HallLayoutPage() {
       if (result.success) {
         setPendingUpdates([]);
         // Refresh data to ensure consistency
-        await fetchHallData();
+        await refetchHallData();
       } else {
         alert(result.error || "Failed to update seats");
         // Revert on error
-        await fetchHallData();
+        await refetchHallData();
       }
     } catch (error) {
       alert("An error occurred while updating seats");
       // Revert on error
-      await fetchHallData();
+      await refetchHallData();
     } finally {
       setUpdating(false);
     }
@@ -314,7 +336,7 @@ export default function HallLayoutPage() {
                 <div className="bg-orange-50 border border-orange-200 p-3 rounded text-sm">
                   <p className="font-medium text-orange-900">Unsaved Changes</p>
                   <p className="text-orange-700 mt-1">
-                    {pendingUpdates.length} seat{pendingUpdates.length !== 1 ? "s" : ""} modified. Click "Save Changes" to apply.
+                    {pendingUpdates.length} seat{pendingUpdates.length !== 1 ? "s" : ""} modified. Click &quot;Save Changes&quot; to apply.
                   </p>
                 </div>
               )}
@@ -349,8 +371,8 @@ export default function HallLayoutPage() {
               <p>• Click any seat to toggle its usability status</p>
               <p>• Green seats are available for exam seating</p>
               <p>• Red seats are marked as unusable</p>
-              <p>• Use "Mark All Usable" to reset all seats</p>
-              <p>• Changes are saved when you click "Save Changes"</p>
+              <p>• Use &quot;Mark All Usable&quot; to reset all seats</p>
+              <p>• Changes are saved when you click &quot;Save Changes&quot;</p>
             </CardContent>
           </Card>
         </div>
