@@ -1,0 +1,4 @@
+roll_number,name,email,department_code,course_code,year
+2024001,John Doe,john@example.com,CS,CS101,1
+2024002,Jane Smith,jane@example.com,CS,CS101,1
+2024003,Bob Johnson,bob@example.com,MATH,MATH101,1
