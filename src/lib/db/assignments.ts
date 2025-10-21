@@ -242,7 +242,7 @@ export async function updateAssignment(
       is_manual: true,
       assigned_by: userId,
       assigned_at: new Date().toISOString(),
-    })
+    } as any)
     .eq("id", assignmentId)
     .select()
     .single();
